@@ -1,0 +1,23 @@
+<%- include('./partials/_head'); %>
+
+<body>
+	<nav>
+		<h1>Foods</h1>
+		<a href="/logout" class="btn btn-danger" role="button">Logout</a>
+	</nav>
+	<hr />
+	<main>
+		<h1>here's your food</h1>
+		<ul class="container">
+			<% foods.forEach(function(food) { %>
+			<li class="row">
+				<div class="col">
+					<ul>
+						<li><%= food %></li>
+					</ul>
+				</div>
+			</li>
+			<% }); %>
+		</ul>
+	</main>
+</body>

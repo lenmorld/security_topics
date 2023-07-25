@@ -1,0 +1,20 @@
+<%- include('./partials/_head'); %>
+
+<body>
+	<form method="post" action="/login">
+		<div class="form-group">
+			<label for="name">Username</label>
+			<input type="text" name="username" class="form-control">
+		</div>
+		<div class="form-group">
+			<label for="name">Password</label>
+			<input type="password" name="password" class="form-control">
+		</div>
+		<button type="submit" class="btn btn-primary">Submit</button>
+	</form>
+	<br />
+	<hr />
+	<br />
+	<a role="button" class="btn btn-success" href="/register">Sign Up</a>
+
+</body>
