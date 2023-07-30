@@ -1,0 +1,31 @@
+<%- include('./partials/_head'); %>
+
+<body>
+	<nav>
+		<h1><%= user.name %>'s Account</h1>
+		<a href="/logout" class="btn btn-danger" role="button">Logout</a>
+	</nav>
+	<hr />
+	<main>
+		<h1>Account balance</h1>
+		<p>$<%= user.balance %></p>
+		
+		<!-- attack vector #1: using GET for state change operations -->
+		<!-- <form method="get" action="/transfer"> -->
+		<!-- attack vector #2: using POST is still vulnerable -->
+		<form method="post" action="/transfer">
+			<p>
+				<% if(locals.message){ %>
+					<h3><%= message %></h3>
+				<% }%>
+			</p>
+
+			Amount: <input type="number" name="amount" />
+			<br />
+			Recipient: <input type="text" name="recipient" />
+			<button type="submit">Transfer</button>
+			<!-- mitigation 1: CSRF token -->
+			<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+		</form>
+	</main>
+</body>

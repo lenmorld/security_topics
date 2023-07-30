@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
+const db = require('./db')
+
 const cookieSession = require('cookie-session');
 
 // configure session
@@ -11,7 +13,15 @@ router.use(cookieSession({
 }));
 
 router.get("/login", async (req, res) => {
-	res.render('login');
+	let message
+	if (req.session.error) {
+		message = req.session.error
+		req.session.error = null
+	}
+
+	res.render('login', {
+		error: message
+	});
 });
 
 router.get("/logout", async (req, res) => {
@@ -43,14 +53,8 @@ router.post('/login', async (req, res) => {
 	console.log(`Authenticating ${userToAuth.username}`)
 
     // HARD-CODE for now
-    let user
-    if (userToAuth.username === "lenny" && userToAuth.password === "abcd1234") {
-        user = {
-            username: "lenny",
-            name: 'Lenny',
-            email: 'lenmorld@gmail.com'
-        }
-
+    const user = db.users[userToAuth.username]
+    if (user && userToAuth.password === user.password) {
         // SUCCESSFUL LOGIN
         // set session to userId
         req.session.loggedInUser = {
@@ -64,11 +68,15 @@ router.post('/login', async (req, res) => {
 		// 	message: `successful login for ${user.username}`
 		// });
 
-        res.redirect('/resource')
+        res.redirect('/account')
     } else {
-		return res.json({
+		return res.render('login', {
 			error: "Login failed"
 		})
+
+		// return res.json({
+		// 	error: "Login failed"
+		// })
     }
 });
 
