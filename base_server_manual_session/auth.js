@@ -6,6 +6,8 @@ const db = require('./db')
 const router = express.Router();
 
 const cookieSession = require('cookie-session');
+const cookieParser = require('cookie-parser');
+const { MITIGATION_STRATEGY, MITIGATION_STRATEGIES } = require('./flags');
 
 // configure session
 router.use(cookieSession({
@@ -13,6 +15,11 @@ router.use(cookieSession({
 	secret: 'SECRET', // config.secret_key,   // secret to sign and verify cookie values
 	httpOnly: true,   // prevents access to `document.cookie` in JS
 }));
+
+if (MITIGATION_STRATEGIES === MITIGATION_STRATEGIES.DOUBLE_SUBMIT_COOKIE) {
+	// configure cookies
+	router.use(cookieParser())
+}
 
 router.get("/login", async (req, res) => {
 	let message
@@ -40,7 +47,6 @@ router.post('/login', async (req, res) => {
 	const userToAuth = req.body;
 
     // find user from DB
-
 	console.log(`Authenticating ${userToAuth.username}`)
 
     // HARD-CODE for now
@@ -51,10 +57,16 @@ router.post('/login', async (req, res) => {
         req.session.loggedInUser = {
             id: user.id,
             username: userToAuth.username,
-            // DONT put password in session
-			// mitigation #1b: manually create token
-			csrfToken: uuidv1.v4()
+            // DON'T put password in session
+			...(MITIGATION_STRATEGY === MITIGATION_STRATEGIES.CSRF_SYNC_TOKEN_2 ? 
+				// manually create token and attach to session
+				{ csrfToken: uuidv1.v4() } : {})
         }
+
+		if (MITIGATION_STRATEGY === MITIGATION_STRATEGIES.DOUBLE_SUBMIT_COOKIE) {
+			// set csrf token as Cookie on client
+			res.cookie('csrf-token', uuidv1.v4() )
+		}
 
 		// SUCCESSFUL LOGIN
         res.redirect('/account')

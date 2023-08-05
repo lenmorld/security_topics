@@ -3,6 +3,7 @@ const cookieParser = require('cookie-parser')
 
 const authRouter = require("./auth")
 const bankRouter = require("./bank")
+const cookieRouter = require("./cookieTest")
 
 const body_parser = require('body-parser');
 
@@ -22,6 +23,7 @@ server.use(express.static(__dirname + '/public'));
 
 server.use("/", authRouter);
 server.use("/", bankRouter);
+server.use("/", cookieRouter);
 server.get("/", (req, res) => {
     res.render('index')
 })

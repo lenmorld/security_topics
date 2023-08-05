@@ -23,7 +23,7 @@
 			Amount: <input type="number" name="amount" />
 			<br />
 			Recipient: <input type="text" name="recipient" />
-			<!-- mitigation 1: CSRF token -->
+			<!-- mitigation #1 or #2: CSRF token -->
 			<% if(locals.csrfToken){ %>
 				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
 			<% }%>
