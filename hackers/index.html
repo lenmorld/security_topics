@@ -12,10 +12,63 @@
     <br />
     <h2>or here, if that doesn't work!</h2>
     <form method="post" action="http://localhost:4000/transfer">
+        <!-- attacker doesn't have CSRF token -->
         <input type="hidden" name="amount" value="1000" />
         <input type="hidden" name="recipient" value="hacky" />
         <button type="submit">Get free gift card!</button>
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
     </form>
+    <!-- API -->
+    <h2>or here for two gift cards in one click! wow, amazing!</h2>
+    <br />
+    <form method="post" action="http://localhost:4000/api/transfer">
+        <!-- not possible to set custom header on HTML form -->
+        <input type="hidden" name="amount" value="1000" />
+        <input type="hidden" name="username" value="lenny" />
+        <input type="hidden" name="recipient" value="hacky" />
+        <button type="submit">Get free gift card!</button>
+    </form>
+    <!-- API 2 -->
+    <h2>or here for three gift cards in one click! wow, amazing!</h2>
+    <br />
+    <div>
+        <!-- not possible to set custom header on HTML form -->
+        <input type="hidden" id="amount" name="amount" value="1000" />
+        <input type="hidden" id="username" name="username" value="lenny" />
+        <input type="hidden" id="recipient" name="recipient" value="hacky" />
+        <button type="submit" id="submit">Get free gift card!</button>
+    </div>
+    <script>
+        // not possible to send cross-origin request with custom header
+        document.querySelector("#submit").addEventListener('click', () => {
+            const amount = document.querySelector("#amount").value
+            const username = document.querySelector("#username").value
+            const recipient = document.querySelector("#recipient").value
+
+            console.log({ amount, username, recipient})
+
+            fetch('http://localhost:4000/api/transfer', {
+                method: 'POST',
+                mode: "no-cors", // no-cors doesn't allow any custom headers
+                //      nor JSON content-type
+                // mode: "cors",
+                headers: {
+                    "Accept": 'application/json',
+                    "Content-Type": "application/json",
+                    // CUSTOM HEADER
+                    "XSRF-TOKEN": 'random'
+                },
+                body: JSON.stringify({
+                    amount,
+                    username,
+                    recipient
+                })
+            }).then(e => {
+                console.log("success", e)
+            }).catch(e => {
+                console.log("error: ", e)
+            })
+        })
+    </script>
+    </script>
 </body>
 </html>
