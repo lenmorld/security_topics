@@ -13,7 +13,8 @@ const { MITIGATION_STRATEGY, MITIGATION_STRATEGIES } = require('./flags');
 router.use(cookieSession({
 	name: 'session',
 	secret: 'SECRET', // config.secret_key,   // secret to sign and verify cookie values
-	httpOnly: true,   // prevents access to `document.cookie` in JS
+	// TEST XSS
+	httpOnly: false,   // prevents access to `document.cookie` in JS
 }));
 
 if (MITIGATION_STRATEGIES === MITIGATION_STRATEGIES.DOUBLE_SUBMIT_COOKIE) {

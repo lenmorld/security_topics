@@ -1,0 +1,22 @@
+<%- include('./partials/_head'); %>
+
+<body>
+    <h1>welcome to our safe and secure site</h1>
+    
+    <!-- attack #1: server reflected xss -->
+    <form action="/reflected-1" method="post">
+        What's your name? <input type="text" id="name" name="name">
+        <button type="submit">Submit</button>
+    </form>
+    <p>
+        <% if(locals.name){ %>
+            <!-- EJS direct interpolation syntax is secure -->
+            <div>Hello <%= name %>!</div>
+            
+            <script>
+                const name1 = "<%= name %>";
+            </script>
+        <% }%>
+
+    </p>
+</body>
