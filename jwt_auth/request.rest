@@ -9,3 +9,10 @@ Content-Type: application/json
     "username": "Jimmy"
 }
 
+###
+
+GET http://localhost:3001/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiSmltbXkiLCJpYXQiOjE2OTIxMzYxNjJ9.yd5R3mpslNkgzTwXQ5tsWmd-o7jpebhPSSejxRdU7ok
+###
+
+POST http://localhost:3000/login
