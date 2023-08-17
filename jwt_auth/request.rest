@@ -1,0 +1,31 @@
+# login
+POST http://localhost:3001/login
+Content-Type: application/json
+
+{
+    "username": "Lenny"
+}
+
+###
+# access gated resource with access token
+GET http://localhost:3000/posts
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTGVubnkiLCJpYXQiOjE2OTIyNjg5MDEsImV4cCI6MTY5MjI2ODkyMX0.4bIS3qTGkwxLpj1PO3f-VoIhBpTN1budl9NZ07pUmLU
+###
+
+# renew access by passing refresh token
+POST http://localhost:3001/token
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTGVubnkiLCJpYXQiOjE2OTIyNjg4NzMsImV4cCI6MTY5MjI3MDY3M30.Jc59Iyr4Sx7fqVA5MrsUbkK5HxiDw1SgTl4iCWGXNUo"
+}
+
+###
+
+# logout to delete refresh token
+POST http://localhost:3001/logout
+Content-Type: application/json
+
+{
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJuYW1lIjoiTGVubnkiLCJpYXQiOjE2OTIxODc3NTQsImV4cCI6MTY5MjE4OTU1NH0.SG9eUO4OeWcJ1ceGcLygHjsmNMPNG-mSzNI8TH9-4mg"
+}
