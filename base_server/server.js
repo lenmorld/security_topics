@@ -24,6 +24,10 @@ server.get("/lenny", (req, res) => {
     res.json({ name: "Lenny" })
 })
 
+server.get("/", (req, res) => {
+    res.render('index')
+})
+
 server.listen(port, () => { // Callback function in ES6
 	console.log(`Server listening at ${port}`);
 });

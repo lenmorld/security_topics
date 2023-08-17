@@ -3,14 +3,23 @@ const router = express.Router();
 
 const db = require('./db')
 
-const cookieSession = require('cookie-session');
+// const cookieSession = require('cookie-session');
+const session = require('express-session');
 
 // configure session
-router.use(cookieSession({
-	name: 'session',
-	secret: 'SECRET', // config.secret_key,   // secret to sign and verify cookie values
-	httpOnly: true,   // prevents access to `document.cookie` in JS
-}));
+// router.use(cookieSession({
+// 	name: 'session',
+// 	secret: 'SECRET', // config.secret_key,   // secret to sign and verify cookie values
+// 	httpOnly: true,   // prevents access to `document.cookie` in JS
+// }));
+
+// express-session
+router.use(session({
+	secret: 'SECRET',
+	resave: false,
+	saveUninitialized: false,
+	cookie: { httpOnly: true }
+  }))
 
 router.get("/login", async (req, res) => {
 	let message
