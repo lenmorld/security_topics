@@ -1,0 +1,84 @@
+<%- include('./partials/_head'); %>
+
+<body>
+	<nav>
+		<h1><%= user.name %>'s Account</h1>
+		<a href="/logout" class="btn btn-danger" role="button">Logout</a>
+	</nav>
+	<hr />
+	<main>
+		<h1>Account balance</h1>
+		<p id="userBalance">$<%= user.balance %></p>
+
+		<% if(locals.customHeader){ %>
+			<form id="formWithCustomHeader">
+		<% } else { %>
+			<!-- attack vector #1: using GET for state change operations -->
+			<!-- <form method="get" action="/transfer"> -->
+			<!-- attack vector #2: using POST is still vulnerable -->
+			<form method="post" action="/transfer">
+		<% } %>
+			<p>
+				<h3 id="message">
+					<% if(locals.message){ %>
+						<%= message %>
+					<% }%>
+				</h3>
+			</p>
+
+			Amount: <input type="number" name="amount" id="amount" />
+			<br />
+			Recipient: <input type="text" name="recipient" id="recipient" />
+			<!-- mitigation #1 or #2: CSRF token -->
+			<% if(locals.csrfToken){ %>
+				<input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+			<% }%>
+			<button type="submit" id="submit">Transfer</button>
+		</form>
+
+		<% if(locals.customHeader){ %>
+			<script>
+				document.querySelector("#submit").addEventListener('click', (e) => {
+					e.preventDefault()
+
+					const username = "<%= user.username %>"
+
+					const amount = document.querySelector("#amount").value
+					const recipient = document.querySelector("#recipient").value
+
+					fetch('http://localhost:4000/transfer', {
+						method: 'POST',
+						mode: "cors",
+						headers: {
+							"Accept": 'application/json',
+							"Content-Type": "application/json",
+							// CUSTOM HEADER
+							"XSRF-TOKEN": 'anything'
+						},
+						body: JSON.stringify({
+							amount,
+							username,
+							recipient
+						})
+					}).then(async raw => {
+						// NOTE: I couldn't find a way to reload EJS page
+						// after client-side JS request
+						// the data from server is not present on EJS render (?) 
+						// have to update everything on JS side
+
+						const data = await raw.json()
+
+						console.log("success from frontend: ", data)
+						// window.location.reload()
+
+						document.querySelector("#message").innerHTML = data.message || ''
+						document.querySelector("#userBalance").innerHTML = "$" + (data.user.balance || 0)
+					}).catch(e => {
+						console.error(e)
+					})
+					
+				})
+			</script>
+		<% }%>
+	</main>
+</body>

