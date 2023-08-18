@@ -2,6 +2,8 @@ https://www.youtube.com/watch?v=mbsmsi7l3r4
 
 # JWT 
 
+[Notion page](https://lennythedev.notion.site/JWT-authentication-0531b57626cf45bca9edbd93b76b7398?pvs=4)
+
 ## part 1 - authentication
 
 ```
