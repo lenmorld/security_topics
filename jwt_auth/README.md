@@ -4,6 +4,29 @@ https://www.youtube.com/watch?v=mbsmsi7l3r4
 
 [Notion page](https://lennythedev.notion.site/JWT-authentication-0531b57626cf45bca9edbd93b76b7398?pvs=4)
 
+## Why JWT
+
+- encapsulates all info in the token
+    - so it can be saved/managed by client
+- enables stateless  (vs session based auth) - server doesn’t have to save session
+- can be used across multiple servers sharing the same Secret
+    - good to maintain login for user between different, but related sites, e.g. Bank, RRSP, Investments
+
+## Overall flow:
+
+1. user /login;  server returns access token and refresh token
+2. user can use access token to access gated resource, e.g /posts, for a limited time
+3. once access token expires, user can request a new access token using refresh token
+4. user can invalidate refresh token on /logout
+
+NOTES:
+1. on login, server creates access token by serializing user info and signing it with a secret; same with refresh token but with a different secret
+2. authentication is done via middleware, to reuse on any gated resource
+   - server validates token using signature  
+3. server validates token using signature 
+4. server deletes the refresh token
+
+
 ## part 1 - authentication
 
 ```
@@ -55,18 +78,3 @@ and "auth server" on http://localhost:3001
 - access token should have a short expiry, 
 - user must use refresh token to get new one (possibly increasing expiry)
 - can invalidate refresh tokens on /logout, to mitigate it being stolen
-
-
-# Overall flow:
-
-1. user /login;  server returns access token and refresh token
-2. user can use access token to access gated resource, e.g /posts, for a limited time
-3. once access token expires, user can request a new access token using refresh token
-4. user can invalidate refresh token on /logout
-
-NOTES:
-1. on login, server creates access token by serializing user info and signing it with a secret; same with refresh token but with a different secret
-2. authentication is done via middleware, to reuse on any gated resource
-   - server validates token using signature  
-3. server validates token using signature 
-4. server deletes the refresh token
